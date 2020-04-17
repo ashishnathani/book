@@ -1,6 +1,7 @@
 package com.ashish.book.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -40,6 +41,9 @@ public class BookRequestParam {
 	@JsonDeserialize(using = CustomDateTimeDeserilizer.class)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date toDate;
+	
+	/** The topic names. */
+	private List<String> topicNames;
 
 	/**
 	 * Gets the author name.
@@ -165,5 +169,23 @@ public class BookRequestParam {
 	 */
 	public void setToDate(Date toDate) {
 		this.toDate = toDate;
+	}
+
+	/**
+	 * Gets the topic names.
+	 *
+	 * @return the topic names
+	 */
+	public List<String> getTopicNames() {
+		return topicNames;
+	}
+
+	/**
+	 * Sets the topic names.
+	 *
+	 * @param topicNames the new topic names
+	 */
+	public void setTopicNames(List<String> topicNames) {
+		this.topicNames = topicNames;
 	}
 }

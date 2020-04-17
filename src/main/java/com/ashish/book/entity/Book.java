@@ -2,11 +2,15 @@ package com.ashish.book.entity;
 
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -64,6 +68,12 @@ public class Book {
 	@JsonDeserialize(using = CustomDateTimeDeserilizer.class)
 	@Type(type = "org.hibernate.type.ZonedDateTimeType")
 	private ZonedDateTime deletedDate = null;
+
+	/** The topics. */
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "book_id", nullable = false)
+	@Where(clause = "delete_date IS NULL")
+	private List<Topic> topics;
 
 	/**
 	 * Gets the id.
@@ -207,6 +217,24 @@ public class Book {
 	 */
 	public void setDeletedDate(final ZonedDateTime deletedDate) {
 		this.deletedDate = deletedDate;
+	}
+
+	/**
+	 * Gets the topics.
+	 *
+	 * @return the topics
+	 */
+	public List<Topic> getTopics() {
+		return topics;
+	}
+
+	/**
+	 * Sets the topics.
+	 *
+	 * @param topics the new topics
+	 */
+	public void setTopics(final List<Topic> topics) {
+		this.topics = topics;
 	}
 
 }
