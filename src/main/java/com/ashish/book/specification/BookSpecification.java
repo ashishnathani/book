@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -21,9 +22,8 @@ import com.ashish.book.entity.BookRequestParam;
  * The Class BookSpecification.
  */
 public class BookSpecification implements Specification<Book> {
-	
-	private static final long serialVersionUID = 8522797454588657490L;
 
+	private static final long serialVersionUID = 8522797454588657490L;
 
 	/** The from date. */
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -48,6 +48,8 @@ public class BookSpecification implements Specification<Book> {
 	/** The price. */
 	private final Double price;
 
+	private final List<String> topicNames;
+
 	/**
 	 * Instantiates a new book specification.
 	 *
@@ -55,24 +57,23 @@ public class BookSpecification implements Specification<Book> {
 	 */
 	public BookSpecification(BookRequestParam bookRequestParam) {
 		super();
-		if(Objects.nonNull(bookRequestParam.getFromDate())) {
+		if (Objects.nonNull(bookRequestParam.getFromDate())) {
 			fromDate = bookRequestParam.getFromDate();
+		} else {
+			fromDate = null;
 		}
-		else {
-			fromDate = null; 
-		}
-		
-		if(Objects.nonNull(bookRequestParam.getToDate())) {
+
+		if (Objects.nonNull(bookRequestParam.getToDate())) {
 			toDate = bookRequestParam.getToDate();
-		}
-		else {
-			toDate = null; 
+		} else {
+			toDate = null;
 		}
 		title = bookRequestParam.getTitle();
 		price = bookRequestParam.getPrice();
 		publicationName = bookRequestParam.getPublicationName();
 		authorName = bookRequestParam.getAuthorName();
 		isbn = bookRequestParam.getIsbn();
+		topicNames = bookRequestParam.getTopicNames();
 	}
 
 	/**
@@ -110,6 +111,10 @@ public class BookSpecification implements Specification<Book> {
 
 		if (Objects.nonNull(isbn)) {
 			predicates.add(criteriaBuilder.equal(root.get("isbn"), isbn));
+		}
+
+		if (!CollectionUtils.isEmpty(topicNames)) {
+			predicates.add(criteriaBuilder.isTrue(root.join("topics", JoinType.LEFT).get("topicName").in(topicNames)));
 		}
 
 		if (fromDate != null && toDate != null) {

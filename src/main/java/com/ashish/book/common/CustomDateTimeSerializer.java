@@ -10,8 +10,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-import ch.qos.logback.core.CoreConstants;
-
 /**
  * The type Custom date time serializer.
  */
